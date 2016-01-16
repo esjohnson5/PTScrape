@@ -12,6 +12,10 @@
     "http://aptaapps.apta.org/*",
     "tabs"
   ],
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  },
 
   "content_scripts": [
 	  {
