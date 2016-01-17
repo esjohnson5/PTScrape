@@ -18,13 +18,9 @@ function scrape(){
 			var clinic_address = address_element.getElementsByTagName('p')[0].innerText;
 			var city_element = info.cells[1];
 			var city = city_element.innerHTML;
-			var addressObj = buildAddObj(clinic_address,city);
+			var addressObj = buildAddObj(clinic_address,city,clinic_name,tbody.rows[0]);
 			
-			chrome.runtime.sendMessage(addressObj,function(response){	
-				console.log(response.results);
-				buildOutput(clinic_name,response.results,tbody.rows[0]);
-			});
-
+			
 			
 			//console.log(clinic_name);
 			console.log(clinic_address);
@@ -32,7 +28,7 @@ function scrape(){
 		}
 }
 
-function buildAddObj(add,c){
+function buildAddObj(add,c,doctor,element){
 	var tmp = add.split("\n");
 	var city = c.split(",")[0];
 	var state = c.split(",")[1];
@@ -56,14 +52,26 @@ function buildAddObj(add,c){
 		city: city,
 		state: state
 	};
-	return address;
+	chrome.runtime.sendMessage(address,function(response){	
+				//console.log(response.results);
+				//var rsp = response.results;
+			if(response.status = "OK"){
+				buildOutput(doctor,name,response.results,element);	
+			}
+			if(response.status = "ZERO_RESULTS")
+			{
+				console.log("no address found");	
+			}
+	});
 }
 
-function buildOutput(name, response, element){
-	var i = 0;
-	var cell = element.insertCell(i);
-	
-	cell.innerHTML = "<div width='10%' class='outputtext'><p>" + name + "<br>" + address + "<br>" + city + "</p></div>";
+function buildOutput(doctor, clinic, response, element){
+	var cell = element.insertCell(0);
+	var address = response[0].address_components[0].long_name + " " + response[0].address_components[1].long_name;
+	var city = response[0].address_components[3].long_name;
+	var state = response[0].address_components[5].short_name;
+	var zip = response[0].address_components[7].long_name;
+	cell.innerHTML = "<div width='10%' class='outputtext'><p>" + doctor + "<br>" + clinic + "<br>" + address + "<br>" + city + "," +  state + "<br>" + zip + "</p></div>";
 }
 
 function styles(){
@@ -72,5 +80,6 @@ function styles(){
 	style.innerHTML = output;
 	document.head.appendChild(style);
 }
+
 styles();
 scrape();
