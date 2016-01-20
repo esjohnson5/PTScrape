@@ -18,7 +18,7 @@ function scrape(){
 			var clinic_address = address_element.getElementsByTagName('p')[0].innerText;
 			var city_element = info.cells[1];
 			var city = city_element.innerHTML;
-			var addressObj = buildAddObj(clinic_address,city,clinic_name,tbody.rows[0]);
+			var addressObj = buildAddObj(clinic_address,city,clinic_name,tbody);
 			
 			
 			
@@ -66,20 +66,31 @@ function buildAddObj(add,c,doctor,element){
 }
 
 function buildOutput(doctor, clinic, response, element){
-	var cell = element.insertCell(0);
+	var i = 1;
+	var row = element.insertRow(i);
+
+	//var node = document.createElement("ul");
+	//node.setAttribute('id','address-list');
+	//var item = document.createElement("li");
+	//item.setAttribute('class','outputtext');
 	var address = response[0].address_components[0].long_name + " " + response[0].address_components[1].long_name;
 	var city = response[0].address_components[3].long_name;
 	var state = response[0].address_components[5].short_name;
 	var zip = response[0].address_components[7].long_name;
-	cell.innerHTML = "<div width='10%' class='outputtext'><p>" + doctor + "<br>" + clinic + "<br>" + address + "<br>" + city + "," +  state + "<br>" + zip + "</p></div>";
+	//var text = doctor + "<br>" + address + "<br>" + city + "," +  state + "<br>" + zip;
+	row.innerHTML = "<div class='outputtext'><p>" + doctor + "<br>" + address + "<br>" + city + "," +  state + "<br>" + zip + "</p></div>";	
+	i++;
+	//item.appendChild(text);
+	//node.appendChild(item);
+	//cell.appendChild(node);
 }
 
 function styles(){
 	var style = document.createElement("style");
-	var output = ".outputtext { font-family: Times; color: black; font-size: 11pt; padding: 2px 2px; text-align: center}";
+	var output = ".outputtext { font-family: Times New Roman; color: black; font-size: 11pt; padding: 2px 2px; text-align: left}";
 	style.innerHTML = output;
 	document.head.appendChild(style);
 }
 
+document.addEventListener('DOMContentLoaded',scrape(),false);
 styles();
-scrape();
