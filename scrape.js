@@ -68,7 +68,6 @@ function buildAddObj(add,c,doctor,element){
 function buildOutput(doctor, clinic, response, element){
 	var i = 1;
 	var row = element.insertRow(i);
-
 	//var node = document.createElement("ul");
 	//node.setAttribute('id','address-list');
 	//var item = document.createElement("li");
@@ -78,16 +77,27 @@ function buildOutput(doctor, clinic, response, element){
 	var state = response[0].address_components[5].short_name;
 	var zip = response[0].address_components[7].long_name;
 	//var text = doctor + "<br>" + address + "<br>" + city + "," +  state + "<br>" + zip;
-	row.innerHTML = "<div class='outputtext'><p>" + doctor + "<br>" + address + "<br>" + city + "," +  state + "<br>" + zip + "</p></div>";	
+	row.innerHTML = "<tr><td class='outputtext'><p>" + doctor + "<br>" + address + "<br>" + city + "," +  state + "<br>" + zip + "</p></td></tr>";	
+	//var cell = row.insertCell(1);
+	//cell.innerHTML = "<button id='copyBtn'>Copy!</button>"
+	
+	//document.getElementById('copyBtn').addEventListener("click", function() {
+	//	copyTo(row.innerText);
+	//});
+	
 	i++;
 	//item.appendChild(text);
 	//node.appendChild(item);
 	//cell.appendChild(node);
 }
 
+//function copyTo(text){
+	//alert(text);
+//}
+
 function styles(){
 	var style = document.createElement("style");
-	var output = ".outputtext { font-family: Times New Roman; color: black; font-size: 11pt; padding: 2px 2px; text-align: left}";
+	var output = ".outputtext p { font-family: Times New Roman; color: black; font-size: 11pt; padding: 2px 2px; text-align: left}";
 	style.innerHTML = output;
 	document.head.appendChild(style);
 }
